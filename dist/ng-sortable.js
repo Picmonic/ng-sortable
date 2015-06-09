@@ -340,7 +340,6 @@
      * @param itemData - the item model data.
      */
     $scope.insertItem = function (index, itemData) {
-      $scope.modelValue.splice(index, 0, itemData);
     };
 
     /**
@@ -352,7 +351,7 @@
     $scope.removeItem = function (index) {
       var removedItem = null;
       if (index > -1) {
-        removedItem = $scope.modelValue.splice(index, 1)[0];
+          removedItem = $scope.modelValue[index];
       }
       return removedItem;
     };
@@ -492,11 +491,15 @@
 
           // Set isDisabled if attr is set, if undefined isDisabled = false
           if (angular.isDefined(attrs.isDisabled)) {
-            scope.$watch(attrs.isDisabled, function (newVal, oldVal) {
-              if (!angular.isUndefined(newVal)) {
-                scope.isDisabled = newVal;
-              }
-            }, true);
+              attrs.$observe('isDisabled', function(value) {
+                  if (!angular.isUndefined(value)) {
+                      if (value == "true") {
+                          scope.isDisabled = true;
+                      } else {
+                          scope.isDisabled = false;
+                      }
+                  }
+              });
           }
         }
       };
